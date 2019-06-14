@@ -12,7 +12,9 @@ body{
 }
 
 .board-list{
+  width:90%;
   margin: 15px 0;
+  border-bottom:1px dotted black;
 }
 
 .board-list__upper{

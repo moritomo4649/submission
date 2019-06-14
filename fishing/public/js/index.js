@@ -5,11 +5,11 @@ Vue.component('board-list', {
 
 Vue.component('board-form', {
   template: '<div class="form-area"><input v-model="name" placeholder="名前を入力"> </br>\
-  <textarea v-model="message" placeholder="コメントを入力"></textarea> </br></br><button v-on:click="doAdd"> 投稿 </button></div>',
+  <textarea id="message" name="message" v-model="message" placeholder="コメントを入力"></textarea> </br></br><button v-on:click="doAdd"> 投稿 </button></div>',
   data: function(){
     return{
       message: '',
-      name: ''
+      name: '',
     }
   },
   methods: {
@@ -23,9 +23,12 @@ Vue.component('board-form', {
 
 var board = new Vue({
   el: '#board',
+  delimiters: ['{%', '%}'],
   data: {
-    lists: [
-    ]
+    name: null,
+    message: null,
+    errors: [],
+    lists: []
   },
   created: function(){
     var vue = this;
@@ -35,6 +38,16 @@ var board = new Vue({
   },
   methods: {
     doAdd: function(name, message){
+      if( name == "" ){
+	name = "匿名";
+      }
+      if( message == "" ){
+	this.errors = [];
+	this.errors.push("コメントを入力してください");
+	return false;
+      }else{
+	this.errors = [];
+      }
       var now = new Date();
       firebase.database().ref('board').push({
         name: name,
